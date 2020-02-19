@@ -20,5 +20,6 @@ public class NodeRunner implements ApplicationRunner {
         log.debug("mongo-debug");
         System.out.println("gogogo");
 
+
     }
 }
