@@ -19,7 +19,5 @@ public class NodeRunner implements ApplicationRunner {
         log.error("mongo-error");
         log.debug("mongo-debug");
         System.out.println("gogogo");
-
-
     }
 }
