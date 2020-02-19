@@ -1,0 +1,13 @@
+server:
+  port: 8081
+spring:
+  data:
+    mongodb:
+      host: infra.mongo.topideal.work
+      port: 27017
+      database: taobao
+      username: taobaoDbOwner
+      password: 123456
+      
+logging:
+  config: classpath:log4j2.xml

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="1800" strict="true">
+    <Properties>
+        <Property name="logging.level">DEBUG</Property>
+        <Property name="logging.category">com.lwxie</Property>
+    </Properties>
+    <Appenders>
+        <NoSql name="MongoAppender">
+            <MongoDb3 databaseName="taobao" collectionName="log" server="infra.mongo.topideal.work"
+                      username="taobaoDbOwner" password="123456"/>
+        </NoSql>
+        <!-- 异步保存数据 -->
+        <Async name="mongoAppenderAsync">
+            <AppenderRef ref="MongoAppender"/>
+        </Async>
+        <Console name="STD_OUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%date{ISO8601}] %-5p %c: %n%m%n%n"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </Console>
+        <Console name="STD_ERR" target="SYSTEM_ERR">
+            <PatternLayout pattern="[%date{ISO8601}] %-5p %c: %n%m%n%n"/>
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT"/>
+            </Filters>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- 根logger的设置 -->
+        <Root level="DEBUG">
+            <AppenderRef ref="STD_ERR"/>
+        </Root>
+        <!-- 指定com.lwxie为日志监听目录，监听级别为DEBUG及以上的日志信息 -->
+        <Logger name="${logging.category}" level="${sys:logging.level}">
+            <AppenderRef ref="mongoAppenderAsync"/>
+            <AppenderRef ref="STD_OUT"/>
+        </Logger>
+    </Loggers>
+</Configuration>
