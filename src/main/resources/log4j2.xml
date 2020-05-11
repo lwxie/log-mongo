@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration monitorInterval="1800" strict="true">
     <Properties>
-        <Property name="logging.level">DEBUG</Property>
+        <Property name="logging.level">INFO</Property>
         <Property name="logging.category">com.lwxie</Property>
     </Properties>
     <Appenders>
+        <!-- 输出到mongoDB -->
         <NoSql name="MongoAppender">
-            <MongoDb3 databaseName="taobao" collectionName="log" server="infra.mongo.topideal.work"
+            <MongoDb3 databaseName="taobao" collectionName="log-${date:yyyy-MM-dd}" server="infra.mongo.topideal.work"
                       username="taobaoDbOwner" password="123456"/>
         </NoSql>
+        <!-- 输出到kafka -->
+        <Kafka name="Kafka" topic="log-test-log" syncSend="false">
+            <PatternLayout pattern="[%date{ISO8601}] %-5p %c: %n%m%n%n"/>
+            <Property name="bootstrap.servers">10.13.42.104:9092</Property>
+        </Kafka>
         <!-- 异步保存数据 -->
         <Async name="mongoAppenderAsync">
             <AppenderRef ref="MongoAppender"/>
+            <AppenderRef ref="Kafka"/>
         </Async>
         <Console name="STD_OUT" target="SYSTEM_OUT">
             <PatternLayout pattern="[%date{ISO8601}] %-5p %c: %n%m%n%n"/>
